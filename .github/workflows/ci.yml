@@ -25,22 +25,22 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
 
-      - name: List available devices
+      - name: Reinstall ADB
         run: |
-          $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager list device
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "platform-tools"
 
       - name: Start Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 31
           arch: x86_64
-          profile: Pixel 2  # Alterado para Pixel 2
+          profile: Pixel 2  # Use um dispositivo mais leve
           disable-animations: true
           emulator-options: -no-window -no-audio -no-boot-anim
           script: |
             adb devices
             echo "Waiting for emulator to start..."
-            sleep 120
+            sleep 180  # Aguarda 3 minutos para o emulador inicializar
             adb devices
             echo "Emulator started!"
 
