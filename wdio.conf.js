@@ -56,7 +56,7 @@ export const config = {
     capabilities: [{
         'appium:platformName': 'Android',
         'appium:platformVersion': '12',
-        'appium:deviceName': 'Pixel 4',
+        'appium:deviceName': 'pixel_3a',
         'appium:automationName': 'UIAutomator2',
         'appium:app': path.join(process.cwd(), 'app/android/ApiDemos-debug.apk')
     }],
