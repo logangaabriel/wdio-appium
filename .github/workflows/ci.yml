@@ -45,21 +45,29 @@ jobs:
         with:
           api-level: 31
           arch: x86_64
-          profile: pixel_3a  # Ajustado para um dispositivo válido
-          avd-name: test_avd  # Usa o AVD criado manualmente
+          profile: pixel_3a
+          avd-name: test_avd
           disable-animations: true
           emulator-options: -no-window -no-audio -no-boot-anim
           script: |
             adb devices
             echo "Waiting for emulator to start..."
-            sleep 180  # Aguarda 3 minutos para o emulador inicializar
-            adb devices
+            timeout 300s sh -c 'until adb -s emulator-5554 shell getprop sys.boot_completed | grep -m 1 "1"; do sleep 10; done'
             echo "Emulator started!"
 
       - name: Install dependencies
         run: |
           npm install -g appium
           npm install
+
+      - name: Start Appium Server
+        run: |
+          appium --log appium.log --log-timestamp --allow-insecure chromedriver_autodownload &
+          sleep 10  # Aguarda o Appium iniciar
+          echo "Checking if Appium is running..."
+          curl http://localhost:4723/wd/hub/status || exit 1
+        env:
+          APPIUM_SKIP_LOGS: 1
 
       - name: Run tests
         run: |
