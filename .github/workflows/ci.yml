@@ -30,10 +30,15 @@ jobs:
         with:
           api-level: 31
           arch: x86_64
-          profile: Pixel 4
+          profile: Pixel 4,
+          disable-animations: true
+          emulator-options: -no-window -no-audio -no-boot-anim
           script: |
+           adb devices
+            echo "Waiting for emulator to start..."
+            sleep 120
             adb devices
-            echo "Emulator started!"
+            echo "Emulator started!
 
       - name: Install dependencies
         run: |
