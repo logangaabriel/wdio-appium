@@ -19,26 +19,30 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '17'  # Alterado para Java 17
+          java-version: '17'
           distribution: 'temurin'
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
+
+      - name: List available devices
+        run: |
+          $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager list device
 
       - name: Start Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 31
           arch: x86_64
-          profile: Pixel 4,
+          profile: Pixel 2  # Alterado para Pixel 2
           disable-animations: true
           emulator-options: -no-window -no-audio -no-boot-anim
           script: |
-           adb devices
+            adb devices
             echo "Waiting for emulator to start..."
             sleep 120
             adb devices
-            echo "Emulator started!
+            echo "Emulator started!"
 
       - name: Install dependencies
         run: |
