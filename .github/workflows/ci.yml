@@ -25,6 +25,17 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
 
+      - name: Accept Android SDK Licenses
+        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+
+      - name: Install required Android system image
+        run: |
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "system-images;android-31;default;x86_64"
+
+      - name: Create AVD manually
+        run: |
+          echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd --force -n test_avd --abi 'default/x86_64' --package 'system-images;android-31;default;x86_64' --device 'pixel_3a'
+
       - name: Reinstall ADB
         run: |
           $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "platform-tools"
@@ -34,7 +45,8 @@ jobs:
         with:
           api-level: 31
           arch: x86_64
-          profile: Pixel 2  # Use um dispositivo mais leve
+          profile: pixel_3a  # Ajustado para um dispositivo válido
+          avd-name: test_avd  # Usa o AVD criado manualmente
           disable-animations: true
           emulator-options: -no-window -no-audio -no-boot-anim
           script: |
